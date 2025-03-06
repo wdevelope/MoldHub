@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "types": ["node", "express"],
+    "target": "es2016",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "allowJs": true,
+    "checkJs": false,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "removeComments": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noImplicitAny": false,
+    "strict": false, // 모든 엄격한 타입 검사 비활성화
+    "strictNullChecks": false, // null 체크 비활성화
+    "strictFunctionTypes": false, // 함수 타입 검사 비활성화
+    "strictPropertyInitialization": false, // 초기화 검사 비활성화
+    "noImplicitThis": false, // 'this' 타입 검사 비활성화
+    "alwaysStrict": true,
+    "noUnusedLocals": false, // 사용되지 않는 로컬 변수 경고 비활성화
+    "noUnusedParameters": false, // 사용되지 않는 매개변수 경고 비활성화
+    "noImplicitReturns": false
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "build"]
+}
