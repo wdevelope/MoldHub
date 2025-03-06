@@ -1,6 +1,5 @@
-import { Router } from "express";
-import { verifyToken } from "../middlewares/auth";
-import testRoutes from "./test.routes";
+import { Router } from 'express';
+import { verifyToken } from '../middlewares/auth';
 
 const router = Router();
 
@@ -10,6 +9,6 @@ router.use(verifyToken);
 // * 라우터
 
 // ^ 테스트트
-router.use("/notice", testRoutes);
+// router.use('/quotes', quoteRoutes);
 
 export default router;

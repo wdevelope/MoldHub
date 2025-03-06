@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from './user.model';
 
 // * 발주 요청 테이블
-@Entity('requests')
+@Entity('request')
 export class Request {
   @PrimaryGeneratedColumn()
   id: number;

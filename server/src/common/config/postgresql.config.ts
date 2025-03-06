@@ -1,10 +1,12 @@
-import { DataSource } from "typeorm";
-// import { Notice } from '../../models/notice.model';
+import { DataSource } from 'typeorm';
+import { User } from '../../models/user.model';
+import { Quote } from '../../models/quote.model';
+import { Request } from '../../models/request.model';
 
-const isProduction = process.env.NODE_ENV === "production"; // 배포 환경 여부 확인
+const isProduction = process.env.NODE_ENV === 'production'; // 배포 환경 여부 확인
 
 export const DB = new DataSource({
-  type: "postgres",
+  type: 'postgres',
   host: process.env.POSTGRES_HOST,
   port: parseInt(process.env.POSTGRES_PORT as string, 10) || 5432,
   username: process.env.POSTGRES_USER,
@@ -14,9 +16,7 @@ export const DB = new DataSource({
   synchronize: true,
   logging: false,
   // 모델 엔티티 들어가는곳
-  entities: [
-    // Notification,
-  ],
+  entities: [User, Quote, Request],
   subscribers: [],
   migrations: [],
   ...(isProduction
