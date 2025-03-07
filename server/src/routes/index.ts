@@ -1,15 +1,12 @@
 import { Router } from 'express';
-import { verifyToken } from '../middlewares/auth';
 import userRoutes from './user.routes';
+import requestRoutes from './request.routes';
 
 const router = Router();
 
-// ^ auth 인증 미들웨어
-router.use(verifyToken);
-
 // * 라우터
-
-// ^ 유저저
-router.use('/user', userRoutes);
+router.use('/user', userRoutes); // 유저
+router.use('/request', requestRoutes); // 발주 요청
+// router.use('/quote', quoteRoutes); // 견적
 
 export default router;
