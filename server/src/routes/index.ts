@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { verifyToken } from '../middlewares/auth';
+import userRoutes from './user.routes';
 
 const router = Router();
 
@@ -8,7 +9,7 @@ router.use(verifyToken);
 
 // * 라우터
 
-// ^ 테스트트
-// router.use('/quotes', quoteRoutes);
+// ^ 유저저
+router.use('/user', userRoutes);
 
 export default router;
