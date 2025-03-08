@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Request } from './request.model';
 import { User } from './user.model';
 
-// * 공급사 제출 견적 테이블
+// * 견적서
 @Entity('quote')
 export class Quote {
   @PrimaryGeneratedColumn()

@@ -7,9 +7,6 @@ const router = express.Router();
 // * 공급사 견적 제출
 router.post('/submit', verifyToken, quoteController.submitQuote);
 
-// * 특정 요청에 대한 모든 견적 조회
-router.get('/request/:requestId', quoteController.getQuotesByRequest);
-
 // * 견적 상세 조회
 router.get('/:id', quoteController.getQuote);
 
