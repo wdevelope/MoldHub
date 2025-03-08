@@ -7,7 +7,7 @@ const router = express.Router();
 // * 발주 요청
 router.post('/', verifyToken, requestController.createRequest);
 
-// * 발주 요청 리스트 전체 조회 (페이지네이션 + 검색)
+// * 발주 요청 리스트 전체 조회 (페이지네이션)
 router.get('/all', requestController.getAllRequestList);
 
 // * 발주 상세 조회
