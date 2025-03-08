@@ -48,6 +48,18 @@ export const getRequest = async (id: number) => {
   return request;
 };
 
+// * 해당 발주 견적 전체 조회
+export const getQuotesListByRequest = async (requestId: number) => {
+  const request = await requestRepository.findOne({
+    where: { id: requestId },
+    relations: ['quotes'],
+  });
+  if (!request) {
+    throw new HttpError(404, 'Request not found');
+  }
+  return request.quotes;
+};
+
 // * 발주 수정
 export const updateRequest = async (id: number, updateData: Partial<Request>) => {
   await requestRepository.update(id, updateData);

@@ -13,6 +13,9 @@ router.get('/all', requestController.getAllRequestList);
 // * 발주 상세 조회
 router.get('/:id', verifyToken, requestController.getRequest);
 
+// * 해당 발주 견적 전체 조회
+router.get('/quote-list', requestController.getQuotesListByRequest);
+
 // * 발주 수정
 router.patch('/:id', verifyToken, requestController.updateRequest);
 

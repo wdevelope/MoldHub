@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user.model';
+import { Quote } from './quote.model';
 
-// * 발주 요청 테이블
+// * 발주
 @Entity('request')
 export class Request {
   @PrimaryGeneratedColumn()
@@ -40,6 +41,10 @@ export class Request {
     default: '등록됨',
   })
   status: string;
+
+  // 견적
+  @OneToMany(() => Quote, (quote) => quote.request)
+  quotes: Quote[];
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
