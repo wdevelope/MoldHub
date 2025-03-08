@@ -11,7 +11,7 @@ router.post('/', verifyToken, requestController.createRequest);
 router.get('/all', requestController.getAllRequestList);
 
 // * 발주 상세 조회
-router.get('/:id', requestController.getRequest);
+router.get('/:id', verifyToken, requestController.getRequest);
 
 // * 발주 수정
 router.patch('/:id', verifyToken, requestController.updateRequest);

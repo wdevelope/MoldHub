@@ -54,7 +54,7 @@ export const updateRequest = async (req: Request, res: Response, next: NextFunct
 export const deleteRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await requestService.deleteRequest(Number(req.params.id));
-    res.status(200).json({ message: '발주 요청이 성공적으로 삭제되었습니다.' });
+    res.status(200).json({ message: 'delete ok!' });
   } catch (error) {
     next(error);
   }
