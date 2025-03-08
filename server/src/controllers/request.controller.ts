@@ -33,7 +33,10 @@ export const getAllRequestList = async (req: Request, res: Response, next: NextF
 // * 발주 상세 조회
 export const getRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const request = await requestService.getRequest(Number(req.params.id));
+    const id = Number(req.params.id);
+    const userId = res.locals.user.id;
+
+    const request = await requestService.getRequest(id, userId);
     res.status(200).json(request);
   } catch (error) {
     next(error);
@@ -50,10 +53,48 @@ export const getQuotesListByRequest = async (req: Request, res: Response, next: 
   }
 };
 
-// * 발주 수정
+// * 발주 수정 (내용, 첨부파일 등)
 export const updateRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const updatedRequest = await requestService.updateRequest(Number(req.params.id), req.body);
+    const id = Number(req.params.id);
+
+    const updatedRequest = await requestService.updateRequest(id, req.body);
+    res.status(200).json(updatedRequest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// & 발주 요청 승인 - 관리자
+export const approveRequest = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.id);
+
+    await requestService.approveRequest(id);
+    res.status(200).json({ message: 'approve ok!' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// & 발주 확정 후 발주 진행 처리 - 관리자
+export const progressRequest = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.id);
+
+    await requestService.progressRequest(id);
+    res.status(200).json({ message: 'progress ok!' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// * 발주 요청 상태 완료 처리
+export const completeRequest = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const requestId = Number(req.params.id);
+    const userId = res.locals.user.id;
+    const updatedRequest = await requestService.completeRequest(requestId, userId);
     res.status(200).json(updatedRequest);
   } catch (error) {
     next(error);

@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user.model';
-import { Quote } from './quote.model';
 
 // * 발주
 @Entity('request')
@@ -20,6 +19,10 @@ export class Request {
   @Column()
   description: string;
 
+  // 예상 납기 일정
+  @Column()
+  dueDate: string;
+
   // 파일 URL
   @Column({ nullable: true })
   fileUrl: string;
@@ -33,7 +36,7 @@ export class Request {
       '승인됨',
       '견적 요청됨',
       '견적 접수 중',
-      '견적 마감',
+      '견적 마감', // 보류
       '발주 확정됨',
       '진행 중',
       '완료됨',
@@ -42,9 +45,13 @@ export class Request {
   })
   status: string;
 
-  // 견적
-  @OneToMany(() => Quote, (quote) => quote.request)
-  quotes: Quote[];
+  // 발주사 완료 여부
+  @Column({ default: false })
+  ordererCompleted: boolean;
+
+  // 공급사 완료 여부
+  @Column({ default: false })
+  supplierCompleted: boolean;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

@@ -17,7 +17,10 @@ export const submitQuote = async (req: Request, res: Response, next: NextFunctio
 // * 견적 상세 조회
 export const getQuote = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const quote = await quoteService.getQuote(Number(req.params.id));
+    const id = Number(req.params.id);
+    const userId = res.locals.user.id;
+
+    const quote = await quoteService.getQuote(id, userId);
     res.status(200).json(quote);
   } catch (error) {
     next(error);

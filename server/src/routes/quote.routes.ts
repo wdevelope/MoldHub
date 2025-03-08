@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/submit', verifyToken, quoteController.submitQuote);
 
 // * 견적 상세 조회
-router.get('/:id', quoteController.getQuote);
+router.get('/:id', verifyToken, quoteController.getQuote);
 
 // * 견적 승인 (발주사만 가능)
 router.patch('/:id/approve', verifyToken, quoteController.approveQuote);
