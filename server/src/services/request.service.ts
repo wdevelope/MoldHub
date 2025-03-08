@@ -1,36 +1,31 @@
 import { DB } from '../common/config/postgresql.config';
 import { Request } from '../models/request.model';
 import { Repository } from 'typeorm';
+import { User } from '../models/user.model';
+import { HttpError } from '../common/errors/HttpError';
 
 const requestRepository: Repository<Request> = DB.getRepository(Request);
+const userRepository: Repository<User> = DB.getRepository(User);
 
 // * 발주 요청 생성
-export const createRequest = async (requestData: Partial<Request>) => {
-  const newRequest = requestRepository.create(requestData);
+export const createRequest = async (requestData: Partial<Request>, userId: number) => {
+  const orderer = await userRepository.findOne({ where: { id: userId } });
+  if (!orderer) {
+    throw new HttpError(404, 'User not found');
+  }
+
+  const newRequest = requestRepository.create({
+    ...requestData,
+    orderer,
+    status: '등록됨',
+  });
+
   return await requestRepository.save(newRequest);
 };
 
-interface QueryParams {
-  search?: string;
-  searchBy?: string;
-  page?: number;
-  limit?: number;
-}
-
-// * 발주 요청 리스트 전체 조회 (페이지네이션 + 검색)
-export const getRequestList = async ({ search, searchBy, page = 1, limit = 10 }: QueryParams) => {
-  const query: any = {};
-
-  if (search && searchBy) {
-    if (searchBy === 'all') {
-      query.where = [{ description: `%${search}%` }, { status: `%${search}%` }];
-    } else if (searchBy === 'description' || searchBy === 'status') {
-      query.where = { [searchBy]: `%${search}%` };
-    }
-  }
-
+// * 발주 요청 리스트 전체 조회 (페이지네이션)
+export const getAllRequestList = async ({ page, limit }: { page: number; limit: number }) => {
   const [requests, totalRequests] = await requestRepository.findAndCount({
-    where: query.where,
     skip: (page - 1) * limit,
     take: limit,
     order: { createdAt: 'DESC' },
@@ -48,7 +43,7 @@ export const getRequestList = async ({ search, searchBy, page = 1, limit = 10 }:
 export const getRequest = async (id: number) => {
   const request = await requestRepository.findOne({ where: { id } });
   if (!request) {
-    throw new Error('Request not found');
+    throw new HttpError(404, 'Request not found');
   }
   return request;
 };

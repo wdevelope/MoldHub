@@ -19,9 +19,9 @@ export class Request {
   @Column()
   description: string;
 
-  // 첨부파일
-  @Column()
-  attachment: string;
+  // 파일 URL
+  @Column({ nullable: true })
+  fileUrl: string;
 
   // 상태 관리 ENUM (등록됨, 검토 중, 승인됨 등)
   @Column({

@@ -4,26 +4,26 @@ import * as requestService from '../services/request.service';
 // * 발주 요청
 export const createRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const newRequest = await requestService.createRequest(req.body);
+    const userId = res.locals.user.id;
+    const newRequest = await requestService.createRequest(req.body, userId);
     res.status(201).json(newRequest);
   } catch (error) {
     next(error);
   }
 };
 
-// * 발주 요청 리스트 전체 조회 (페이지네이션 + 검색)
-export const getRequestList = async (req: Request, res: Response, next: NextFunction) => {
+// * 발주 요청 리스트 전체 조회 (페이지네이션)
+export const getAllRequestList = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { search, searchBy, page = '1', limit = '10' } = req.query;
+    const { page = '1', limit = '10' } = req.query;
 
     const queryParams = {
-      search: search as string,
-      searchBy: searchBy as string,
-      page: parseInt(page as string, 10),
-      limit: parseInt(limit as string, 10),
+      page: parseInt(page as string, 10) || 1,
+      limit: parseInt(limit as string, 10) || 10,
     };
+    console.log('queryParams', queryParams);
 
-    const result = await requestService.getRequestList(queryParams);
+    const result = await requestService.getAllRequestList(queryParams);
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -54,7 +54,7 @@ export const updateRequest = async (req: Request, res: Response, next: NextFunct
 export const deleteRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await requestService.deleteRequest(Number(req.params.id));
-    res.status(204).send();
+    res.status(200).json({ message: '발주 요청이 성공적으로 삭제되었습니다.' });
   } catch (error) {
     next(error);
   }
