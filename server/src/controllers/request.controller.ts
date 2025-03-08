@@ -40,6 +40,16 @@ export const getRequest = async (req: Request, res: Response, next: NextFunction
   }
 };
 
+// * 해당 발주 견적 전체 조회
+export const getQuotesListByRequest = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const quotes = await requestService.getQuotesListByRequest(Number(req.query.requestId as string));
+    res.status(200).json(quotes);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // * 발주 수정
 export const updateRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
