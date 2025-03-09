@@ -19,7 +19,7 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string) as jwt.JwtPayload;
 
     res.locals.user = {
-      id: decoded.id,
+      id: decoded.userId,
       name: decoded.userName,
     };
 

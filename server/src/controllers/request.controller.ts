@@ -21,7 +21,6 @@ export const getAllRequestList = async (req: Request, res: Response, next: NextF
       page: parseInt(page as string, 10) || 1,
       limit: parseInt(limit as string, 10) || 10,
     };
-    console.log('queryParams', queryParams);
 
     const result = await requestService.getAllRequestList(queryParams);
     res.status(200).json(result);
@@ -57,8 +56,9 @@ export const getQuotesListByRequest = async (req: Request, res: Response, next: 
 export const updateRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id);
+    const userId = res.locals.user.id;
 
-    const updatedRequest = await requestService.updateRequest(id, req.body);
+    const updatedRequest = await requestService.updateRequest(id, req.body, userId);
     res.status(200).json(updatedRequest);
   } catch (error) {
     next(error);
@@ -104,7 +104,9 @@ export const completeRequest = async (req: Request, res: Response, next: NextFun
 // * 발주 삭제
 export const deleteRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await requestService.deleteRequest(Number(req.params.id));
+    const requestId = Number(req.params.id);
+    const userId = res.locals.user.id;
+    await requestService.deleteRequest(requestId, userId);
     res.status(200).json({ message: 'delete ok!' });
   } catch (error) {
     next(error);

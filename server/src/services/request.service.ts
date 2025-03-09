@@ -54,7 +54,7 @@ export const getRequest = async (id: number, userId: number) => {
     }
 
     if (request.status === '등록됨') {
-      await requestRepository.update(id, { status: '검토중' });
+      await requestRepository.update(id, { status: '검토 중' });
     }
   }
 
@@ -79,7 +79,22 @@ export const getQuotesListByRequest = async (requestId: number) => {
 };
 
 // * 발주 수정 (내용, 첨부파일 등)
-export const updateRequest = async (id: number, updateData: Partial<Request>) => {
+export const updateRequest = async (id: number, updateData: Partial<Request>, userId: number) => {
+  const user = await userRepository.findOne({ where: { id: userId } });
+  if (!user) {
+    throw new HttpError(404, 'User not found');
+  }
+
+  const request = await requestRepository.findOne({ where: { id }, relations: ['orderer'] });
+  if (!request) {
+    throw new HttpError(404, 'Request not found');
+  }
+
+  // 발주사만 수정 가능
+  if (request.orderer.id !== userId) {
+    throw new HttpError(403, 'Only the orderer can update the request');
+  }
+
   await requestRepository.update(id, updateData);
   return await requestRepository.findOne({ where: { id } });
 };
@@ -125,6 +140,21 @@ export const completeRequest = async (requestId: number, userId: number) => {
 };
 
 // * 발주 삭제
-export const deleteRequest = async (id: number) => {
-  await requestRepository.delete(id);
+export const deleteRequest = async (requestId: number, userId: number) => {
+  const user = await userRepository.findOne({ where: { id: userId } });
+  if (!user) {
+    throw new HttpError(404, 'User not found');
+  }
+
+  const request = await requestRepository.findOne({ where: { id: requestId }, relations: ['orderer'] });
+  if (!request) {
+    throw new HttpError(404, 'Request not found');
+  }
+
+  // 발주사만 삭제 가능
+  if (request.orderer.id !== userId) {
+    throw new HttpError(403, 'Only the orderer can delete the request');
+  }
+
+  await requestRepository.delete(requestId);
 };
