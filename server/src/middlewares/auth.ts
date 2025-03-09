@@ -25,21 +25,15 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
 
     next();
   } catch (error) {
-    throw new HttpError(401, 'Invalid token.');
+    next(new HttpError(401, 'Invalid token.'));
   }
 };
 
 // * 관리자 권한 검증 미들웨어
 export const verifyAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies['dotco-access-token'];
-
-    if (!token) {
-      throw new HttpError(403, 'No token provided.');
-    }
-
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await userRepository.findOne({ where: { id: decoded.id } });
+    const userId = res.locals.user.id;
+    const user = await userRepository.findOne({ where: { id: userId } });
 
     if (!user) {
       throw new HttpError(404, 'User not found.');
@@ -57,6 +51,6 @@ export const verifyAdmin = async (req: Request, res: Response, next: NextFunctio
 
     next();
   } catch (error) {
-    throw new HttpError(401, 'Permission denied.');
+    next(new HttpError(401, 'Permission denied.'));
   }
 };
