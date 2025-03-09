@@ -13,14 +13,18 @@ const userRepository: Repository<User> = DB.getRepository(User);
 // * 공급사 견적 제출
 export const submitQuote = async (userId: number, requestId: number, quoteData: Partial<Quote>) => {
   const supplier = await userRepository.findOne({ where: { id: userId } });
-
   if (!supplier) {
     throw new HttpError(404, 'Supplier not found');
   }
-  const request = await requestRepository.findOne({ where: { id: requestId } });
 
+  const request = await requestRepository.findOne({ where: { id: requestId } });
   if (!request) {
-    throw new HttpError(404, 'request not found');
+    throw new HttpError(404, 'Request not found');
+  }
+
+  // request가 승인됨 상태일 경우에만 견적 제출 가능
+  if (request.status !== '승인됨') {
+    throw new HttpError(400, 'Request must be in approved status to submit a quote');
   }
 
   const newQuote = quoteRepository.create({
@@ -31,7 +35,7 @@ export const submitQuote = async (userId: number, requestId: number, quoteData: 
 
   const savedQuote = await quoteRepository.save(newQuote);
 
-  // 발주사 상태 견적 요청됨으로 변경
+  // 발주 상태를 "견적 요청됨"으로 변경
   request.status = '견적 요청됨';
   await requestRepository.save(request);
 
@@ -40,7 +44,7 @@ export const submitQuote = async (userId: number, requestId: number, quoteData: 
 
 // * 견적 상세 조회
 export const getQuote = async (id: number, userId: number) => {
-  const quote = await quoteRepository.findOne({ where: { id } });
+  const quote = await quoteRepository.findOne({ where: { id }, relations: ['request'] });
 
   if (!quote) {
     throw new HttpError(404, 'Quote not found');

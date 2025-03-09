@@ -106,7 +106,7 @@ export const approveRequest = async (id: number) => {
 
 // & 발주 확정 후 발주 진행 처리 - 관리자
 export const progressRequest = async (id: number) => {
-  await requestRepository.update(id, { status: '진행중' });
+  await requestRepository.update(id, { status: '진행 중' });
 };
 
 // * 발주 요청 상태 완료 처리

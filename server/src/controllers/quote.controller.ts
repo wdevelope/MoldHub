@@ -5,9 +5,8 @@ import * as quoteService from '../services/quote.service';
 export const submitQuote = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = res.locals.user.id;
-    const requestId = req.body.requestId;
-    const { estimatedCost, estimatedTime } = req.body;
-    const newQuote = await quoteService.submitQuote(userId, requestId, req.body);
+    const { requestId, estimatedCost, estimatedTime } = req.body;
+    const newQuote = await quoteService.submitQuote(userId, requestId, { estimatedCost, estimatedTime });
     res.status(201).json(newQuote);
   } catch (error) {
     next(error);
