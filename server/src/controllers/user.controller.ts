@@ -54,7 +54,7 @@ export const getMyInfo = async (req: Request, res: Response, next: NextFunction)
 // * 내 정보 수정
 export const updateMyInfo = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = res.locals.user._id;
+    const userId = res.locals.user.id;
     const updateData = req.body;
     const updatedUser = await userServices.updateMyInfo(userId, updateData);
 
@@ -67,7 +67,7 @@ export const updateMyInfo = async (req: Request, res: Response, next: NextFuncti
 // * 유저 삭제
 export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = res.locals.user._id;
+    const userId = res.locals.user.id;
     await userServices.deleteUser(userId);
     res.status(204).send();
   } catch (error) {

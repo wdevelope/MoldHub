@@ -17,9 +17,9 @@ router.post('/logout', verifyToken, userController.logout);
 router.get('/mypage', verifyToken, userController.getMyInfo);
 
 // * 내 정보 수정
-router.patch('/:userId', userController.updateMyInfo);
+router.patch('/edit', verifyToken, userController.updateMyInfo);
 
 // * 유저 탈퇴
-router.delete('/signout', userController.deleteUser);
+router.delete('/signout', verifyToken, userController.deleteUser);
 
 export default router;
