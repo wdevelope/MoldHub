@@ -3,6 +3,7 @@ import { Request } from '../models/request.model';
 import { Repository } from 'typeorm';
 import { User } from '../models/user.model';
 import { HttpError } from '../common/errors/HttpError';
+import { uploadToS3 } from '../middlewares/file';
 
 const requestRepository: Repository<Request> = DB.getRepository(Request);
 const userRepository: Repository<User> = DB.getRepository(User);
@@ -21,6 +22,16 @@ export const createRequest = async (requestData: Partial<Request>, userId: numbe
   });
 
   return await requestRepository.save(newRequest);
+};
+
+// * 설계도 파일 업로드 (s3)
+export const uploadFile = async (file: Express.Multer.File) => {
+  if (!file) {
+    throw new HttpError(400, 'Blueprint File is required');
+  }
+
+  const imageUrl = await uploadToS3(file, 'Blueprint');
+  return imageUrl;
 };
 
 // * 발주 요청 리스트 전체 조회 (페이지네이션)

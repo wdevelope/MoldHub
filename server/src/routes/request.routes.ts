@@ -1,11 +1,15 @@
 import express from 'express';
 import * as requestController from '../controllers/request.controller';
 import { verifyToken, verifyAdmin } from '../middlewares/auth';
+import { upload } from '../middlewares/file';
 
 const router = express.Router();
 
 // * 발주 요청
 router.post('/', verifyToken, requestController.createRequest);
+
+// * 설계도 파일 업로드 (s3)
+router.post('/upload', verifyToken, upload.single('file'), requestController.uploadFile);
 
 // * 발주 요청 리스트 전체 조회 (페이지네이션)
 router.get('/all', requestController.getAllRequestList);

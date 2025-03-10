@@ -12,6 +12,17 @@ export const createRequest = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+// * 설계도 파일 업로드 (s3)
+export const uploadFile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const file = req.file;
+    const imageUrl = await requestService.uploadFile(file);
+    res.status(200).json({ imageUrl });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // * 발주 요청 리스트 전체 조회 (페이지네이션)
 export const getAllRequestList = async (req: Request, res: Response, next: NextFunction) => {
   try {
