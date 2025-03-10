@@ -66,10 +66,10 @@ export const getRequest = async (id: number, userId: number) => {
   return request;
 };
 
-// * 해당 발주 견적 전체 조회
-export const getQuotesListByRequest = async (requestId: number) => {
+// * 해당 발주 요청된 견적 리스트 전체 조회
+export const getQuotesListByRequest = async (id: number) => {
   const request = await requestRepository.findOne({
-    where: { id: requestId },
+    where: { id: id },
     relations: ['quotes'],
   });
   if (!request) {
@@ -99,17 +99,17 @@ export const updateRequest = async (id: number, updateData: Partial<Request>, us
   return await requestRepository.findOne({ where: { id } });
 };
 
-// & 발주 요청 승인 - 관리자
+// * 발주 요청 승인 - 관리자
 export const approveRequest = async (id: number) => {
   await requestRepository.update(id, { status: '승인됨' });
 };
 
-// & 발주 확정 후 발주 진행 처리 - 관리자
+// * 발주 확정 후 발주 진행 처리 - 관리자
 export const progressRequest = async (id: number) => {
   await requestRepository.update(id, { status: '진행 중' });
 };
 
-// * 발주 요청 상태 완료 처리
+// * 발주 요청 상태 완료 처리 (발주사와 공급사 모두 해야함)
 export const completeRequest = async (requestId: number, userId: number) => {
   const request = await requestRepository.findOne({ where: { id: requestId }, relations: ['orderer', 'supplier'] });
   if (!request) {

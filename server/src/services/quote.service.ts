@@ -88,6 +88,7 @@ export const approveQuote = async (id: number, userId: number) => {
   // 발주 상태를 "발주 확정됨"으로 변경
   const request = quote.request;
   request.status = '발주 확정됨';
+  request.supplier = quote.supplier;
   await requestRepository.save(request);
 
   return quote;

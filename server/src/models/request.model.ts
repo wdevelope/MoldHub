@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user.model';
+import { Quote } from './quote.model';
 
 // * 발주
 @Entity('request')
@@ -52,6 +53,10 @@ export class Request {
   // 공급사 완료 여부
   @Column({ default: false })
   supplierCompleted: boolean;
+
+  // 견적 리스트
+  @OneToMany(() => Quote, (quote) => quote.request)
+  quotes: Quote[];
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

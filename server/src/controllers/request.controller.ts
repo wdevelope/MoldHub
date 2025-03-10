@@ -42,10 +42,12 @@ export const getRequest = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-// * 해당 발주 견적 전체 조회
+// * 해당 발주 요청된 견적 리스트 전체 조회
 export const getQuotesListByRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const quotes = await requestService.getQuotesListByRequest(Number(req.query.requestId as string));
+    const id = Number(req.params.id);
+
+    const quotes = await requestService.getQuotesListByRequest(id);
     res.status(200).json(quotes);
   } catch (error) {
     next(error);
@@ -65,7 +67,7 @@ export const updateRequest = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-// & 발주 요청 승인 - 관리자
+// * 발주 요청 승인 - 관리자
 export const approveRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id);
@@ -77,7 +79,7 @@ export const approveRequest = async (req: Request, res: Response, next: NextFunc
   }
 };
 
-// & 발주 확정 후 발주 진행 처리 - 관리자
+// * 발주 확정 후 발주 진행 처리 - 관리자
 export const progressRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id);
@@ -89,7 +91,7 @@ export const progressRequest = async (req: Request, res: Response, next: NextFun
   }
 };
 
-// * 발주 요청 상태 완료 처리
+// * 발주 요청 상태 완료 처리 (발주사와 공급사 모두 해야함)
 export const completeRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const requestId = Number(req.params.id);
