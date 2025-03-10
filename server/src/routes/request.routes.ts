@@ -25,7 +25,7 @@ router.patch('/:id/approve', verifyToken, verifyAdmin, requestController.approve
 // * 발주 확정 후 발주 진행 처리 - 관리자
 router.patch('/:id/progress', verifyToken, verifyAdmin, requestController.progressRequest);
 
-// * 발주 요청 상태 완료 처리 (발주사와 공급사 모두 해야함)
+// * 발주 최종완료 처리 (발주사와 공급사 모두 해야함)
 router.patch('/:id/complete', verifyToken, requestController.completeRequest);
 
 // * 발주 삭제

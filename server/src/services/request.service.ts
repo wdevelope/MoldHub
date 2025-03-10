@@ -109,7 +109,7 @@ export const progressRequest = async (id: number) => {
   await requestRepository.update(id, { status: '진행 중' });
 };
 
-// * 발주 요청 상태 완료 처리 (발주사와 공급사 모두 해야함)
+// * 발주 최종완료 처리 (발주사와 공급사 모두 해야함)
 export const completeRequest = async (requestId: number, userId: number) => {
   const request = await requestRepository.findOne({ where: { id: requestId }, relations: ['orderer', 'supplier'] });
   if (!request) {

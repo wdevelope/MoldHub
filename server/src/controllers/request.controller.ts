@@ -91,7 +91,7 @@ export const progressRequest = async (req: Request, res: Response, next: NextFun
   }
 };
 
-// * 발주 요청 상태 완료 처리 (발주사와 공급사 모두 해야함)
+// * 발주 최종완료 처리 (발주사와 공급사 모두 해야함)
 export const completeRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const requestId = Number(req.params.id);
