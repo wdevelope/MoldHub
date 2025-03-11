@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Button from '../../components/Button';
 import { createPost, uploadFile } from '../../api/post';
 import useAuthStore from '../../store/authStore';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const CreatePost = () => {
   const [description, setDescription] = useState('');
@@ -45,6 +46,9 @@ const CreatePost = () => {
   return (
     <div className="min-h-screen flex flex-col items-center p-6">
       <main className="flex-grow w-full max-w-2xl">
+        <Link to="/" className="text-gray-500 mb-4 inline-flex items-center p-2 rounded">
+          <FaArrowLeft className="mr-2" />
+        </Link>
         <h2 className="text-2xl font-bold mb-4">금형제작 요청 게시글 작성</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="flex flex-col">

@@ -45,16 +45,6 @@ export const uploadFile = async (file) => {
   }
 };
 
-// 견적 리스트 전체 조회
-export const getQuotesListByRequest = async (id) => {
-  try {
-    const response = await axios.get(`${API_URL}/request/${id}/quote-list`, { withCredentials: true });
-    return response.data;
-  } catch (error) {
-    throw error.response.data;
-  }
-};
-
 // 발주 요청 승인
 export const approveRequest = async (id) => {
   try {
