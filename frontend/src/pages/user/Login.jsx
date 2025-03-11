@@ -3,17 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
 import { login } from '../../api/user';
+import useAuthStore from '../../store/authStore';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const setUser = useAuthStore((state) => state.setUser);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      const userData = await login(email, password);
+      setUser(userData);
       navigate('/');
     } catch (err) {
       setError(err.message);
