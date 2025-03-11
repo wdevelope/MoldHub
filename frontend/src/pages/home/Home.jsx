@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../../components/Header';
 import PostList from '../post/PostList';
 
 const Home = () => {

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Button from '../../components/Button';
-import Header from '../../components/Header';
 
 const SubmitEstimate = () => {
   const { id } = useParams();
@@ -15,7 +14,6 @@ const SubmitEstimate = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-grow p-6 flex flex-col items-center">
         <Link to={`/post/${id}`} className="text-blue-500 mb-4">
           ← 뒤로가기
