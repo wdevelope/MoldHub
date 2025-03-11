@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Button from '../../components/Button';
-import Header from '../../components/Header';
+import { signup } from '../../api/user';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -10,16 +11,20 @@ const Signup = () => {
   const [status, setStatus] = useState('ORDERER');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 회원가입 로직 추가
-    console.log('회원가입:', { name, email, password, status });
-    navigate('/');
+    try {
+      await signup(name, email, password, status);
+      toast.success('회원가입 성공!');
+      navigate('/login');
+    } catch (err) {
+      console.error('회원가입 실패:', err);
+      toast.error('회원가입 실패!');
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-grow p-6 flex flex-col items-center">
         <h2 className="text-2xl font-bold mb-4">회원가입</h2>
         <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-md">

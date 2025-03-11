@@ -23,9 +23,9 @@ export const logout = async () => {
 };
 
 // 회원 가입
-export const signup = async (name, email, password) => {
+export const signup = async (name, email, password, status) => {
   try {
-    const response = await axios.post(`${API_URL}/user/signup`, { name, email, password });
+    const response = await axios.post(`${API_URL}/user/signup`, { name, email, password, status });
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -35,7 +35,7 @@ export const signup = async (name, email, password) => {
 // 유저 정보 조회
 export const getUser = async () => {
   try {
-    const response = await axios.get(`${API_URL}/user/me`, { withCredentials: true });
+    const response = await axios.get(`${API_URL}/user/mypage`, { withCredentials: true });
     return response.data;
   } catch (error) {
     throw error.response.data;

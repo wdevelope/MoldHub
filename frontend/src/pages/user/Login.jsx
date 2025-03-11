@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Button from '../../components/Button';
-import Header from '../../components/Header';
 import { login } from '../../api/user';
 import useAuthStore from '../../store/authStore';
 
@@ -17,15 +17,16 @@ const Login = () => {
     try {
       const userData = await login(email, password);
       setUser(userData);
+      toast.success('로그인 성공!');
       navigate('/');
     } catch (err) {
       setError(err.message);
+      toast.error('로그인 실패!');
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-grow p-6 flex flex-col items-center">
         <h2 className="text-2xl font-bold mb-4">로그인</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}

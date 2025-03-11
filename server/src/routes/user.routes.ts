@@ -5,7 +5,7 @@ import { verifyToken } from '../middlewares/auth';
 const router = express.Router();
 
 // * 회원 가입
-router.post('/signin', userController.createUser);
+router.post('/signup', userController.createUser);
 
 // * 로그인
 router.post('/login', userController.login);
