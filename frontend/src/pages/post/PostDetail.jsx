@@ -36,15 +36,14 @@ const PostDetail = () => {
   return (
     <div className="max-w-4xl mx-auto flex flex-col">
       <main className="flex-grow p-6 flex flex-col">
-        <Link to="/" className="text-gray-500 mb-4 inline-flex items-centerp-2">
+        <Link to="/" className="text-gray-500 mb-4 inline-flex items-center  p-2 rounded">
           <FaArrowLeft className="mr-2" />
         </Link>
         <h2 className="text-2xl font-bold mt-4 mb-4">게시글 상세 페이지 {id}</h2>
         <div className="flex justify-between items-center mb-4">
           <div>
-            <p className="text-lg font-medium">
-              예상 납기일: {post.dueDate} //  {post.status}
-            </p>
+            <p className="text-lg font-medium">예상 납기일: {post.dueDate}</p>
+            <p className="text-sm text-gray-500">상태: {post.status}</p>
           </div>
           <Link to={`/post/${id}/submit`}>
             <Button className="ml-4">견적 제출</Button>
@@ -53,7 +52,7 @@ const PostDetail = () => {
         <p className="text-sm text-gray-500 mb-4">
           파일:{' '}
           <a href={post.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-            다운로드
+            보기
           </a>
         </p>
         <hr className="my-4" />

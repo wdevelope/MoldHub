@@ -21,3 +21,26 @@ export const getPostDetail = async (id) => {
     throw error.response.data;
   }
 };
+
+// 금형제작 요청 게시글 작성
+export const createPost = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/request`, data, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+// 파일 업로드
+export const uploadFile = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await axios.post(`${API_URL}/request/upload`, formData, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

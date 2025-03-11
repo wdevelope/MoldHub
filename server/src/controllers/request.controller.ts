@@ -5,7 +5,8 @@ import * as requestService from '../services/request.service';
 export const createRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = res.locals.user.id;
-    const newRequest = await requestService.createRequest(req.body, userId);
+    const { description, dueDate, fileUrl } = req.body;
+    const newRequest = await requestService.createRequest({ description, dueDate, fileUrl }, userId);
     res.status(201).json(newRequest);
   } catch (error) {
     next(error);

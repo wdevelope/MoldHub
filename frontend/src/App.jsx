@@ -7,6 +7,7 @@ import PostDetail from './pages/post/PostDetail';
 import Login from './pages/user/Login';
 import Signup from './pages/user/Signup';
 import SubmitEstimate from './pages/post/SubmitEstimate';
+import CreatePost from './pages/post/CreatePost';
 import Header from './components/Header';
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/post/:id/submit" element={<SubmitEstimate />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/create-post" element={<CreatePost />} />
       </Routes>
       <ToastContainer
         position="top-center"
