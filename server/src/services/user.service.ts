@@ -50,7 +50,7 @@ export const login = async (email: string, password: string) => {
 
 // * 내 정보 조회
 export const getMyInfo = async (userId: number) => {
-  const user = await userRepository.findOne({ where: { id: userId }, select: ['id', 'name', 'email'] });
+  const user = await userRepository.findOne({ where: { id: userId }, select: ['id', 'name', 'email', 'status'] });
 
   if (!user) {
     throw new HttpError(404, 'User not found');

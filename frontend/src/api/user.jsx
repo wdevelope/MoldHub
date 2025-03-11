@@ -33,7 +33,7 @@ export const signup = async (name, email, password, status) => {
 };
 
 // 유저 정보 조회
-export const getUser = async () => {
+export const getUserInfo = async () => {
   try {
     const response = await axios.get(`${API_URL}/user/mypage`, { withCredentials: true });
     return response.data;

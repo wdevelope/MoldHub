@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { Link, useParams } from 'react-router-dom';
-import { getQuotesListByRequest, getQuoteDetail } from '../../api/quote';
+import { getQuotesListByRequest, getQuoteDetail, approveQuote } from '../../api/quote';
 import Button from '../../components/Button';
+import useAuthStore from '../../store/authStore';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const QuotesList = () => {
@@ -10,6 +12,7 @@ const QuotesList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedQuote, setSelectedQuote] = useState(null);
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     const fetchQuotes = async () => {
@@ -32,6 +35,19 @@ const QuotesList = () => {
       setSelectedQuote(quoteDetail);
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const handleApprove = async (quoteId) => {
+    try {
+      await approveQuote(quoteId);
+      toast.success('견적 승인 성공!');
+      // 승인 후 견적 상세 정보를 다시 불러옵니다.
+      const quoteDetail = await getQuoteDetail(quoteId);
+      setSelectedQuote(quoteDetail);
+    } catch (err) {
+      setError(err.message);
+      toast.error('견적 승인 실패!');
     }
   };
 
@@ -72,6 +88,11 @@ const QuotesList = () => {
           <p>{selectedQuote.approved ? '승인됨' : '승인되지 않음'}</p>
           <p>생성일: {new Date(selectedQuote.createdAt).toLocaleString()}</p>
           <hr className="my-4" />
+          {user && user.status === 'ORDERER' && !selectedQuote.approved && (
+            <Button onClick={() => handleApprove(selectedQuote.id)} className="mt-4">
+              견적 승인
+            </Button>
+          )}
         </div>
       )}
     </div>

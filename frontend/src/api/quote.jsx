@@ -35,3 +35,13 @@ export const getQuoteDetail = async (id) => {
     throw error.response.data;
   }
 };
+
+// 견적 승인
+export const approveQuote = async (id) => {
+  try {
+    const response = await axios.patch(`${API_URL}/quote/${id}/approve`, {}, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
