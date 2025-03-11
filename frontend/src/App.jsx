@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/home/Home';
 import PostDetail from './pages/post/PostDetail';
-import Login from './pages/auth/Login';
-import Signup from './pages/auth/Signup';
+import Login from './pages/user/Login';
+import Signup from './pages/user/Signup';
 import SubmitEstimate from './pages/post/SubmitEstimate';
 
 const App = () => {
