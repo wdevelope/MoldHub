@@ -76,7 +76,8 @@ export const approveQuote = async (id: number, userId: number) => {
     throw new HttpError(403, '발주사만 견적을 승인할 수 있습니다.');
   }
 
-  const quote = await quoteRepository.findOne({ where: { id }, relations: ['request'] });
+  // 견적과 관련된 요청 및 공급사 로드
+  const quote = await quoteRepository.findOne({ where: { id }, relations: ['request', 'supplier'] });
   if (!quote) {
     throw new HttpError(404, '견적을 찾을 수 없습니다.');
   }
@@ -87,8 +88,13 @@ export const approveQuote = async (id: number, userId: number) => {
 
   // 발주 상태를 "발주 확정됨"으로 변경
   const request = quote.request;
+
+  if (!quote.supplier) {
+    throw new HttpError(400, '견적에 공급사가 설정되지 않았습니다.');
+  }
+
   request.status = '발주 확정됨';
-  request.supplier = quote.supplier;
+  request.supplier = quote.supplier; // 공급사를 설정
   await requestRepository.save(request);
 
   return quote;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Button from '../../components/Button';
-import { getPostDetail } from '../../api/post';
+import { getPostDetail, completeRequest } from '../../api/post';
 import { FaArrowLeft } from 'react-icons/fa';
 import AdminActions from './AdminActions';
 import useAuthStore from '../../store/authStore';
@@ -24,6 +24,19 @@ const PostDetail = () => {
       setError(errorMessage);
       toast.error(errorMessage);
       setLoading(false);
+    }
+  };
+
+  const handleComplete = async () => {
+    if (window.confirm('발주를 최종 완료 처리하시겠습니까?')) {
+      try {
+        await completeRequest(id);
+        toast.success('발주 최종 완료 처리 성공!');
+        await fetchPostDetail(); // 상태 갱신
+      } catch (error) {
+        const errorMessage = error.response?.data?.message || '발주 최종 완료 처리 실패!';
+        toast.error(errorMessage);
+      }
     }
   };
 
@@ -78,6 +91,13 @@ const PostDetail = () => {
           <p className="mt-2">{post.description}</p>
         </div>
         {user && user.status === 'DOTCO' && <AdminActions fetchPostDetail={fetchPostDetail} />}
+        {user && (user.status === 'ORDERER' || user.status === 'SUPPLIER') && (
+          <div className="mt-4">
+            <Button onClick={handleComplete} variant="primary">
+              발주 최종 완료 처리
+            </Button>
+          </div>
+        )}
       </main>
     </div>
   );
