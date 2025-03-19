@@ -9,6 +9,7 @@ const SubmitEstimate = () => {
   const { id } = useParams();
   const [estimatedCost, setEstimatedCost] = useState('');
   const [estimatedTime, setEstimatedTime] = useState('');
+  const [error, setError] = useState(null); // 에러 상태 추가
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -19,6 +20,7 @@ const SubmitEstimate = () => {
       navigate(`/post/${id}`);
     } catch (error) {
       const errorMessage = error.response?.data?.message || '견적 제출에 실패했습니다.';
+      setError(errorMessage); // 에러 상태 업데이트
       toast.error(errorMessage);
     }
   };
@@ -30,7 +32,7 @@ const SubmitEstimate = () => {
           <FaArrowLeft className="mr-2" />
         </Link>
         <h2 className="text-2xl font-bold mb-4">견적 제출</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {error && <p className="text-red-500 mb-4">{error}</p>} {/* 에러 메시지 표시 */}
         <form onSubmit={handleSubmit} className="flex flex-col">
           <label className="mb-2">
             예상 비용:

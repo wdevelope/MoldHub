@@ -31,10 +31,6 @@ const PostDetail = () => {
     fetchPostDetail();
   }, [id]);
 
-  useEffect(() => {
-    console.log('User data:', user);
-  }, [user]);
-
   if (loading) {
     return <p>로딩 중...</p>;
   }
@@ -55,12 +51,12 @@ const PostDetail = () => {
             <p className="text-lg font-medium">예상 납기일: {post.dueDate}</p>
             <p className="text-sm text-gray-500">상태: {post.status}</p>
           </div>
-          <div className="flex space-x-4">
+          <div className="flex flex-col space-y-4">
             <Link to={`/post/${id}/submit`}>
               <Button className="ml-4">견적 제출</Button>
             </Link>
             <Link to={`/post/${id}/quotes`}>
-              <Button className="ml-4">견적 리스트 보기</Button>
+              <Button className="ml-4">견적 리스트</Button>
             </Link>
           </div>
         </div>
@@ -77,7 +73,7 @@ const PostDetail = () => {
           </a>
         </p>
         <hr className="my-4" />
-        <div className="mb-10">
+        <div className="mb-10" style={{ minHeight: '150px' }}>
           <p className="mt-2">{post.description}</p>
         </div>
         {user && user.status === 'DOTCO' && <AdminActions />}

@@ -17,9 +17,9 @@ const Signup = () => {
       await signup(name, email, password, status);
       toast.success('회원가입 성공!');
       navigate('/login');
-    } catch (err) {
-      console.error('회원가입 실패:', err);
-      toast.error('회원가입 실패!');
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || '회원가입에 실패했습니다.';
+      toast.error(errorMessage);
     }
   };
 
