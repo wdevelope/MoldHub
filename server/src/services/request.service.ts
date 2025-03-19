@@ -119,7 +119,7 @@ export const approveRequest = async (id: number) => {
 
   // 상태가 "검토 중"이 아닌 경우 예외 발생
   if (request.status !== '검토 중') {
-    throw new HttpError(400, '발주 요청은 "검토 중" 상태에서만 승인할 수 있습니다.');
+    throw new HttpError(400, '발주 요청은 검토 중 상태에서만 승인할 수 있습니다.');
   }
 
   // 상태를 "승인됨"으로 업데이트

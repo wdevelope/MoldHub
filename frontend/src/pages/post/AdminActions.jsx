@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { approveRequest, progressRequest, completeRequest } from '../../api/post';
 import Button from '../../components/Button';
 
-const AdminActions = () => {
+const AdminActions = ({ fetchPostDetail }) => {
   const { id } = useParams();
 
   const handleApprove = async () => {
@@ -12,9 +12,9 @@ const AdminActions = () => {
       try {
         await approveRequest(id);
         toast.success('발주 요청 승인 성공!');
+        await fetchPostDetail(); // 부모 컴포넌트에서 전달받은 함수 호출
       } catch (error) {
-        const errorMessage = error || '발주 요청 승인 실패!';
-        toast.error(errorMessage);
+        toast.error(error);
       }
     }
   };
@@ -24,9 +24,9 @@ const AdminActions = () => {
       try {
         await progressRequest(id);
         toast.success('발주 진행 처리 성공!');
+        await fetchPostDetail(); // 부모 컴포넌트에서 전달받은 함수 호출
       } catch (error) {
-        const errorMessage = error || '발주 진행 처리 실패!';
-        toast.error(errorMessage);
+        toast.error(error);
       }
     }
   };
@@ -36,9 +36,9 @@ const AdminActions = () => {
       try {
         await completeRequest(id);
         toast.success('발주 최종 완료 처리 성공!');
+        await fetchPostDetail(); // 부모 컴포넌트에서 전달받은 함수 호출
       } catch (error) {
-        const errorMessage = error || '발주 최종 완료 처리 실패';
-        toast.error(errorMessage);
+        toast.error(error);
       }
     }
   };

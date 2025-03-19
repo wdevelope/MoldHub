@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { handleApiError } from '../store/error';
 const API_URL = import.meta.env.VITE_API_URL;
 
 // 견적 제출
@@ -12,7 +12,7 @@ export const submitQuote = async (requestId, estimatedCost, estimatedTime) => {
     );
     return response.data;
   } catch (error) {
-    throw error.response.data.message;
+    throw handleApiError(error);
   }
 };
 
@@ -22,7 +22,7 @@ export const getQuotesListByRequest = async (requestId) => {
     const response = await axios.get(`${API_URL}/request/${requestId}/quote-list`, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data.message;
+    throw handleApiError(error);
   }
 };
 
@@ -32,7 +32,7 @@ export const getQuoteDetail = async (id) => {
     const response = await axios.get(`${API_URL}/quote/${id}`, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data.message;
+    throw handleApiError(error);
   }
 };
 
@@ -42,6 +42,6 @@ export const approveQuote = async (id) => {
     const response = await axios.patch(`${API_URL}/quote/${id}/approve`, {}, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data.message;
+    throw handleApiError(error);
   }
 };

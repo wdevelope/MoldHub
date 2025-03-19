@@ -14,20 +14,20 @@ const PostDetail = () => {
   const [error, setError] = useState(null);
   const user = useAuthStore((state) => state.user);
 
-  useEffect(() => {
-    const fetchPostDetail = async () => {
-      try {
-        const data = await getPostDetail(id);
-        setPost(data);
-        setLoading(false);
-      } catch (error) {
-        const errorMessage = error.response?.data?.message || '게시글 정보를 불러오는 데 실패했습니다.';
-        setError(errorMessage);
-        toast.error(errorMessage);
-        setLoading(false);
-      }
-    };
+  const fetchPostDetail = async () => {
+    try {
+      const data = await getPostDetail(id);
+      setPost(data);
+      setLoading(false);
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || '게시글 정보를 불러오는 데 실패했습니다.';
+      setError(errorMessage);
+      toast.error(errorMessage);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchPostDetail();
   }, [id]);
 
@@ -45,11 +45,10 @@ const PostDetail = () => {
         <Link to="/" className="text-gray-500 mb-4 inline-flex items-center p-2 rounded">
           <FaArrowLeft className="mr-2" />
         </Link>
-        <h2 className="text-2xl font-bold mt-4 mb-4">게시글 상세 페이지 {id}</h2>
         <div className="flex justify-between items-center mb-4">
           <div>
-            <p className="text-lg font-medium">예상 납기일: {post.dueDate}</p>
-            <p className="text-sm text-gray-500">상태: {post.status}</p>
+            <p className="text-md font-medium">예상 납기일: {post.dueDate}</p>
+            <p className="text-md font-medium">상태: {post.status}</p>
           </div>
           <div className="flex flex-col space-y-4">
             <Link to={`/post/${id}/submit`}>
@@ -76,7 +75,7 @@ const PostDetail = () => {
         <div className="mb-10" style={{ minHeight: '150px' }}>
           <p className="mt-2">{post.description}</p>
         </div>
-        {user && user.status === 'DOTCO' && <AdminActions />}
+        {user && user.status === 'DOTCO' && <AdminActions fetchPostDetail={fetchPostDetail} />}
       </main>
     </div>
   );

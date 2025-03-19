@@ -38,8 +38,7 @@ const CreatePost = () => {
       toast.success('게시글 작성 성공!');
       navigate('/');
     } catch (error) {
-      const errorMessage = error.response?.data?.message || '게시글 작성에 실패했습니다.';
-      toast.error(errorMessage);
+      toast.error(error);
     }
   };
 

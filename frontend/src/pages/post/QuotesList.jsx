@@ -21,8 +21,7 @@ const QuotesList = () => {
         setQuotes(data.quotes);
         setLoading(false);
       } catch (error) {
-        const errorMessage = error.response?.data?.message || '견적 리스트를 불러오는 데 실패했습니다.';
-        toast.error(errorMessage);
+        toast.error(error);
       }
     };
 
@@ -45,9 +44,8 @@ const QuotesList = () => {
       // 승인 후 견적 상세 정보를 다시 불러옵니다.
       const quoteDetail = await getQuoteDetail(quoteId);
       setSelectedQuote(quoteDetail);
-    } catch (err) {
-      setError(err.message);
-      toast.error('견적 승인 실패!');
+    } catch (error) {
+      toast.error(error);
     }
   };
 

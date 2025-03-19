@@ -14,8 +14,7 @@ const PostList = () => {
         setPosts(data.requests);
         setLoading(false);
       } catch (error) {
-        const errorMessage = error.response?.data?.message || '게시글 리스트를 불러오는 데 실패했습니다.';
-        toast.error(errorMessage);
+        toast.error(error);
       }
     };
 
