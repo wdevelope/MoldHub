@@ -14,17 +14,17 @@ const userRepository: Repository<User> = DB.getRepository(User);
 export const submitQuote = async (userId: number, requestId: number, quoteData: Partial<Quote>) => {
   const supplier = await userRepository.findOne({ where: { id: userId } });
   if (!supplier) {
-    throw new HttpError(404, 'Supplier not found');
+    throw new HttpError(404, '공급사를 찾을 수 없습니다.');
   }
 
   const request = await requestRepository.findOne({ where: { id: requestId } });
   if (!request) {
-    throw new HttpError(404, 'Request not found');
+    throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
   }
 
   // request가 승인됨 상태일 경우에만 견적 제출 가능
   if (request.status !== '승인됨') {
-    throw new HttpError(400, 'Request must be in approved status to submit a quote');
+    throw new HttpError(400, '발주 요청이 승인된 상태에서만 견적을 제출할 수 있습니다.');
   }
 
   const newQuote = quoteRepository.create({
@@ -47,14 +47,14 @@ export const getQuote = async (id: number, userId: number) => {
   const quote = await quoteRepository.findOne({ where: { id }, relations: ['request'] });
 
   if (!quote) {
-    throw new HttpError(404, 'Quote not found');
+    throw new HttpError(404, '견적을 찾을 수 없습니다.');
   }
 
   // 일단 유저 정보 조회
   const user = await userRepository.findOne({ where: { id: userId } });
 
   if (!user) {
-    throw new HttpError(404, 'User not found');
+    throw new HttpError(404, '사용자를 찾을 수 없습니다.');
   }
 
   // 해당 견적의 발주사가 조회한 경우에는, 견적 상태를 "견적 접수 중"으로 변경
@@ -73,12 +73,12 @@ export const approveQuote = async (id: number, userId: number) => {
   // 발주사인지 확인
   const user = await userRepository.findOne({ where: { id: userId } });
   if (!user || user.status !== 'ORDERER') {
-    throw new HttpError(403, 'Buyer only');
+    throw new HttpError(403, '발주사만 견적을 승인할 수 있습니다.');
   }
 
   const quote = await quoteRepository.findOne({ where: { id }, relations: ['request'] });
   if (!quote) {
-    throw new HttpError(404, 'Quote not found');
+    throw new HttpError(404, '견적을 찾을 수 없습니다.');
   }
 
   // 견적 승인

@@ -12,7 +12,7 @@ const userRepository: Repository<User> = DB.getRepository(User);
 export const createRequest = async (requestData: Partial<Request>, userId: number) => {
   const orderer = await userRepository.findOne({ where: { id: userId } });
   if (!orderer) {
-    throw new HttpError(404, 'User not found');
+    throw new HttpError(404, '사용자를 찾을 수 없습니다.');
   }
 
   const newRequest = requestRepository.create({
@@ -27,7 +27,7 @@ export const createRequest = async (requestData: Partial<Request>, userId: numbe
 // * 설계도 파일 업로드 (s3)
 export const uploadFile = async (file: Express.Multer.File) => {
   if (!file) {
-    throw new HttpError(400, 'Blueprint File is required');
+    throw new HttpError(400, '설계도 파일이 필요합니다.');
   }
 
   const imageUrl = await uploadToS3(file, 'Blueprint');
@@ -52,16 +52,15 @@ export const getAllRequestList = async ({ page, limit }: { page: number; limit: 
 
 // * 발주 상세 조회
 export const getRequest = async (id: number, userId: number) => {
-  // 상세조회시 유저의 status가 DOTCO일 경우, request의 status가 '등록됨'일 경우에만 status를 '검토중'으로 변경
   const user = await userRepository.findOne({ where: { id: userId } });
   if (!user) {
-    throw new HttpError(404, 'User not found');
+    throw new HttpError(404, '사용자를 찾을 수 없습니다.');
   }
 
   if (user.status === 'DOTCO') {
     const request = await requestRepository.findOne({ where: { id } });
     if (!request) {
-      throw new HttpError(404, 'Request not found');
+      throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
     }
 
     if (request.status === '등록됨') {
@@ -71,7 +70,7 @@ export const getRequest = async (id: number, userId: number) => {
 
   const request = await requestRepository.findOne({ where: { id } });
   if (!request) {
-    throw new HttpError(404, 'Request not found');
+    throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
   }
 
   return request;
@@ -84,7 +83,7 @@ export const getQuotesListByRequest = async (id: number) => {
     relations: ['quotes'],
   });
   if (!request) {
-    throw new HttpError(404, 'Request not found');
+    throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
   }
   return request;
 };
@@ -93,17 +92,17 @@ export const getQuotesListByRequest = async (id: number) => {
 export const updateRequest = async (id: number, updateData: Partial<Request>, userId: number) => {
   const user = await userRepository.findOne({ where: { id: userId } });
   if (!user) {
-    throw new HttpError(404, 'User not found');
+    throw new HttpError(404, '사용자를 찾을 수 없습니다.');
   }
 
   const request = await requestRepository.findOne({ where: { id }, relations: ['orderer'] });
   if (!request) {
-    throw new HttpError(404, 'Request not found');
+    throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
   }
 
   // 발주사만 수정 가능
   if (request.orderer.id !== userId) {
-    throw new HttpError(403, 'Only the orderer can update the request');
+    throw new HttpError(403, '발주사만 발주 요청을 수정할 수 있습니다.');
   }
 
   await requestRepository.update(id, updateData);
@@ -112,11 +111,32 @@ export const updateRequest = async (id: number, updateData: Partial<Request>, us
 
 // * 발주 요청 승인 - 관리자
 export const approveRequest = async (id: number) => {
+  // 발주 요청 조회
+  const request = await requestRepository.findOne({ where: { id } });
+  if (!request) {
+    throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
+  }
+
+  // 상태가 "검토 중"이 아닌 경우 예외 발생
+  if (request.status !== '검토 중') {
+    throw new HttpError(400, '발주 요청은 "검토 중" 상태에서만 승인할 수 있습니다.');
+  }
+
+  // 상태를 "승인됨"으로 업데이트
   await requestRepository.update(id, { status: '승인됨' });
 };
 
-// * 발주 확정 후 발주 진행 처리 - 관리자
+// * 발주 진행 처리 - 관리자
 export const progressRequest = async (id: number) => {
+  const request = await requestRepository.findOne({ where: { id } });
+  if (!request) {
+    throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
+  }
+
+  if (request.status !== '발주 확정') {
+    throw new HttpError(400, '발주 확정 상태에서만 진행할 수 있습니다.');
+  }
+
   await requestRepository.update(id, { status: '진행 중' });
 };
 
@@ -124,25 +144,22 @@ export const progressRequest = async (id: number) => {
 export const completeRequest = async (requestId: number, userId: number) => {
   const request = await requestRepository.findOne({ where: { id: requestId }, relations: ['orderer', 'supplier'] });
   if (!request) {
-    throw new HttpError(404, 'Request not found');
+    throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
   }
 
   const user = await userRepository.findOne({ where: { id: userId } });
   if (!user) {
-    throw new HttpError(404, 'User not found');
+    throw new HttpError(404, '사용자를 찾을 수 없습니다.');
   }
 
-  // 발주사 완료 처리
   if (user.id === request.orderer.id) {
     request.ordererCompleted = true;
   }
 
-  // 공급사 완료 처리
   if (user.id === request.supplier.id) {
     request.supplierCompleted = true;
   }
 
-  // 발주사와 공급사 모두 완료 처리한 경우 상태를 "완료됨"으로 변경
   if (request.ordererCompleted && request.supplierCompleted) {
     request.status = '완료됨';
   }
@@ -154,17 +171,16 @@ export const completeRequest = async (requestId: number, userId: number) => {
 export const deleteRequest = async (requestId: number, userId: number) => {
   const user = await userRepository.findOne({ where: { id: userId } });
   if (!user) {
-    throw new HttpError(404, 'User not found');
+    throw new HttpError(404, '사용자를 찾을 수 없습니다.');
   }
 
   const request = await requestRepository.findOne({ where: { id: requestId }, relations: ['orderer'] });
   if (!request) {
-    throw new HttpError(404, 'Request not found');
+    throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
   }
 
-  // 발주사만 삭제 가능
   if (request.orderer.id !== userId) {
-    throw new HttpError(403, 'Only the orderer can delete the request');
+    throw new HttpError(403, '발주사만 발주 요청을 삭제할 수 있습니다.');
   }
 
   await requestRepository.delete(requestId);
