@@ -24,6 +24,8 @@ const Header = () => {
         MoldHub
       </Link>
       <div>
+        {user && <span className="mr-4 text-lg font-medium text-gray-700">반갑습니다 {user.name}님</span>}
+
         {user ? (
           <>
             <Link to="/mypage">

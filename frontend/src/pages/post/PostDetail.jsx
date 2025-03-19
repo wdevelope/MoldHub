@@ -70,7 +70,7 @@ const PostDetail = () => {
             className="text-blue-500 underline"
             download={post.fileUrl.split('/').pop()}
           >
-            다운로드
+            보기
           </a>
         </p>
         <hr className="my-4" />
