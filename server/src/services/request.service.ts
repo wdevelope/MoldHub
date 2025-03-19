@@ -133,7 +133,7 @@ export const progressRequest = async (id: number) => {
     throw new HttpError(404, '발주 요청을 찾을 수 없습니다.');
   }
 
-  if (request.status !== '발주 확정') {
+  if (request.status !== '발주 확정됨') {
     throw new HttpError(400, '발주 확정 상태에서만 진행할 수 있습니다.');
   }
 

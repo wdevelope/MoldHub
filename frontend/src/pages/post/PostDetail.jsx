@@ -51,9 +51,11 @@ const PostDetail = () => {
             <p className="text-md font-medium">상태: {post.status}</p>
           </div>
           <div className="flex flex-col space-y-4">
-            <Link to={`/post/${id}/submit`}>
-              <Button className="ml-4">견적 제출</Button>
-            </Link>
+            {user && user.status === 'SUPPLIER' && (
+              <Link to={`/post/${id}/submit`}>
+                <Button className="ml-4">견적 제출</Button>
+              </Link>
+            )}
             <Link to={`/post/${id}/quotes`}>
               <Button className="ml-4">견적 리스트</Button>
             </Link>

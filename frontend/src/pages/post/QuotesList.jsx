@@ -38,17 +38,17 @@ const QuotesList = () => {
   };
 
   const handleApprove = async (quoteId) => {
-    try {
-      await approveQuote(quoteId);
-      toast.success('견적 승인 성공!');
-      // 승인 후 견적 상세 정보를 다시 불러옵니다.
-      const quoteDetail = await getQuoteDetail(quoteId);
-      setSelectedQuote(quoteDetail);
-    } catch (error) {
-      toast.error(error);
+    if (window.confirm('이 견적을 승인하시겠습니까?')) {
+      try {
+        await approveQuote(quoteId);
+        toast.success('견적 승인 성공!');
+        const quoteDetail = await getQuoteDetail(quoteId);
+        setSelectedQuote(quoteDetail);
+      } catch (error) {
+        toast.error(error);
+      }
     }
   };
-
   if (loading) {
     return <p>로딩 중...</p>;
   }
