@@ -9,7 +9,6 @@ const SubmitEstimate = () => {
   const { id } = useParams();
   const [estimatedCost, setEstimatedCost] = useState('');
   const [estimatedTime, setEstimatedTime] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,9 +17,9 @@ const SubmitEstimate = () => {
       await submitQuote(id, estimatedCost, estimatedTime);
       toast.success('견적 제출 성공!');
       navigate(`/post/${id}`);
-    } catch (err) {
-      setError(err.message);
-      toast.error('견적 제출 실패!');
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || '견적 제출에 실패했습니다.';
+      toast.error(errorMessage);
     }
   };
 

@@ -12,8 +12,9 @@ const AdminActions = () => {
       try {
         await approveRequest(id);
         toast.success('발주 요청 승인 성공!');
-      } catch (err) {
-        toast.error('발주 요청 승인 실패!');
+      } catch (error) {
+        const errorMessage = error || '발주 요청 승인 실패!';
+        toast.error(errorMessage);
       }
     }
   };
@@ -23,8 +24,9 @@ const AdminActions = () => {
       try {
         await progressRequest(id);
         toast.success('발주 진행 처리 성공!');
-      } catch (err) {
-        toast.error('발주 진행 처리 실패!');
+      } catch (error) {
+        const errorMessage = error || '발주 진행 처리 실패!';
+        toast.error(errorMessage);
       }
     }
   };
@@ -34,8 +36,9 @@ const AdminActions = () => {
       try {
         await completeRequest(id);
         toast.success('발주 최종 완료 처리 성공!');
-      } catch (err) {
-        toast.error('발주 최종 완료 처리 실패!');
+      } catch (error) {
+        const errorMessage = error || '발주 최종 완료 처리 실패';
+        toast.error(errorMessage);
       }
     }
   };

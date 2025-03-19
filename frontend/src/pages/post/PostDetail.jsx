@@ -5,6 +5,7 @@ import { getPostDetail } from '../../api/post';
 import { FaArrowLeft } from 'react-icons/fa';
 import AdminActions from './AdminActions';
 import useAuthStore from '../../store/authStore';
+import { toast } from 'react-toastify';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -19,8 +20,10 @@ const PostDetail = () => {
         const data = await getPostDetail(id);
         setPost(data);
         setLoading(false);
-      } catch (err) {
-        setError(err.message);
+      } catch (error) {
+        const errorMessage = error.response?.data?.message || '게시글 정보를 불러오는 데 실패했습니다.';
+        setError(errorMessage);
+        toast.error(errorMessage);
         setLoading(false);
       }
     };

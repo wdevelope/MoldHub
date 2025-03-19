@@ -8,7 +8,7 @@ export const login = async (email, password) => {
     const response = await axios.post(`${API_URL}/user/login`, { email, password }, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };
 
@@ -18,7 +18,7 @@ export const logout = async () => {
     const response = await axios.post(`${API_URL}/user/logout`, {}, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };
 
@@ -28,7 +28,7 @@ export const signup = async (name, email, password, status) => {
     const response = await axios.post(`${API_URL}/user/signup`, { name, email, password, status });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };
 
@@ -38,6 +38,6 @@ export const getUserInfo = async () => {
     const response = await axios.get(`${API_URL}/user/mypage`, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };

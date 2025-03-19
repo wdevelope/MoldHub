@@ -8,7 +8,7 @@ export const getPostList = async () => {
     const response = await axios.get(`${API_URL}/request/all`, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };
 
@@ -18,7 +18,7 @@ export const getPostDetail = async (id) => {
     const response = await axios.get(`${API_URL}/request/${id}`, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };
 
@@ -28,7 +28,7 @@ export const createPost = async (data) => {
     const response = await axios.post(`${API_URL}/request`, data, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };
 
@@ -41,7 +41,7 @@ export const uploadFile = async (file) => {
     const response = await axios.post(`${API_URL}/request/upload`, formData, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };
 
@@ -51,7 +51,7 @@ export const approveRequest = async (id) => {
     const response = await axios.patch(`${API_URL}/request/${id}/approve`, {}, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };
 
@@ -61,7 +61,7 @@ export const progressRequest = async (id) => {
     const response = await axios.patch(`${API_URL}/request/${id}/progress`, {}, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };
 
@@ -71,6 +71,6 @@ export const completeRequest = async (id) => {
     const response = await axios.patch(`${API_URL}/request/${id}/complete`, {}, { withCredentials: true });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data.message;
   }
 };

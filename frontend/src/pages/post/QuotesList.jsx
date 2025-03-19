@@ -20,9 +20,9 @@ const QuotesList = () => {
         const data = await getQuotesListByRequest(id);
         setQuotes(data.quotes);
         setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+      } catch (error) {
+        const errorMessage = error.response?.data?.message || '견적 리스트를 불러오는 데 실패했습니다.';
+        toast.error(errorMessage);
       }
     };
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPostList } from '../../api/post';
+import { toast } from 'react-toastify';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -13,9 +13,9 @@ const PostList = () => {
         const data = await getPostList();
         setPosts(data.requests);
         setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
+      } catch (error) {
+        const errorMessage = error.response?.data?.message || '게시글 리스트를 불러오는 데 실패했습니다.';
+        toast.error(errorMessage);
       }
     };
 
@@ -24,10 +24,6 @@ const PostList = () => {
 
   if (loading) {
     return <p>로딩 중...</p>;
-  }
-
-  if (error) {
-    return <p>오류 발생: {error}</p>;
   }
 
   return (
